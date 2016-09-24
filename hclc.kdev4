@@ -1,0 +1,4 @@
+[Project]
+Name=hclc
+Manager=KDevCMakeManager
+VersionControl=kdevgit
