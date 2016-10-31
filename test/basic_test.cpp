@@ -80,7 +80,7 @@ TEST(BasicUse, sizeEviction)
       }
    };
    // TODO: make it simpler
-   rclc::cache<int, std::string, std::hash<int>, std::equal_to<int>, std::allocator<std::pair<const int, std::string>>, Sizer> cache(10);
+   rclc::cache<int, std::string, std::hash<int>, std::equal_to<int>, Sizer> cache(10);
    cache[0] = "one"; // mem used = 3
    cache[1] = "two"; // mem used = 6
    ASSERT_EQ(6U, cache.memory());

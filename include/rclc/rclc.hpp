@@ -10,8 +10,8 @@ template < class Key,
            class Value,
            class Hash = std::hash<Key>,
            class Pred = std::equal_to<Key>,
-           class Alloc = std::allocator< std::pair<const Key, Value> >,
-           class Sizer = count_sizer
+           class Sizer = count_sizer,
+           class Alloc = std::allocator< std::pair<const Key, Value> >
            >
 class cache : public detail::cache_base<Key, Value, Hash, Pred, Alloc, Sizer>
 {
