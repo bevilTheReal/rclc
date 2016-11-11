@@ -19,6 +19,11 @@ TEST(BasicUse, canInsertAndAccess)
    // Change a value
    cache[1] = "un";
    ASSERT_EQ("un", cache[1]);
+
+   // Passing key by const-reference
+   int key = 5;
+   cache[key] = "five";
+   ASSERT_EQ("five", cache[key]);
 }
 
 TEST(BasicUse, eviction)

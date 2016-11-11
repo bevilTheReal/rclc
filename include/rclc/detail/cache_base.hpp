@@ -91,30 +91,39 @@ public:
    // Access {{{
    Value& operator[](const key_type& key)
    {
-      auto& item = this->m_cache[key];
+      auto pos = this->m_cache.find(key);
       this->m_evictionList.push_front(key);
-      if (item.first != typename eviction_list_t::iterator())
+      if (pos == this->m_cache.end())
+      {
+         pos = this->m_cache.insert(pos, std::make_pair(key, std::make_pair(this->m_evictionList.begin(), Value())));
+      }
+      else
       {
          // Not new item
-         this->m_evictionList.erase(item.first);
+         this->m_evictionList.erase(pos->second.first);
+         pos->second.first = this->m_evictionList.begin();
       }
-      item.first = this->m_evictionList.begin();
       this->check_for_eviction();
-      return item.second;
+      return pos->second.second;
    }
 
    Value& operator[](key_type&& key)
    {
-      auto& item = this->m_cache[key];
+      auto pos = this->m_cache.find(key);
       this->m_evictionList.push_front(std::move(key));
-      if (item.first != typename eviction_list_t::iterator())
+      if (pos == this->m_cache.end())
+      {
+         const auto& lp = this->m_evictionList.begin();
+         pos = this->m_cache.insert(pos, std::make_pair(*lp, std::make_pair(lp, Value())));
+      }
+      else
       {
          // Not new item
-         this->m_evictionList.erase(item.first);
+         this->m_evictionList.erase(pos->second.first);
+         pos->second.first = this->m_evictionList.begin();
       }
-      item.first = this->m_evictionList.begin();
       this->check_for_eviction();
-      return item.second;
+      return pos->second.second;
    }
    // }}}
 protected:
