@@ -34,10 +34,11 @@ add_dependencies(rclc-test googletest)
 
 target_link_libraries(
     rclc-test
-    ${GTEST_LIBS_DIR}/libgtest.a
-    ${GTEST_LIBS_DIR}/libgtest_main.a
+    gtest
+    gtest_main
     ${CMAKE_THREAD_LIBS_INIT})
 
+if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
 set_target_properties(rclc-test PROPERTIES
     PREFIX ""
     SUFFIX ""
@@ -45,6 +46,7 @@ set_target_properties(rclc-test PROPERTIES
 
 set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g3")
 set(CMAKE_CSS_FLAGS_RELEASE "-03 -g")
+endif()
 
 add_test(
     NAME rclc-test

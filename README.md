@@ -18,7 +18,7 @@ make check
 ## How to use
 
 ### Basic usage
-```
+```c++
 // Define a cache of strings with int keys; the maximum number of items is 100
 rclc::cache<int, std::string> cache(100);
 // The cache has an unordered_map access semantic
@@ -33,7 +33,7 @@ RCLC provides two eviction policies:
 2. Item-size based
 
 To use an item-size eviction policy, you have to provide a sizer that computes the size of each value:
-```
+```c++
 struct StringSizer : rclc::base_sizer<rclc::item_size_eviction_tag>
 {
    size_t operator()(const std::string& s) const
@@ -44,6 +44,15 @@ struct StringSizer : rclc::base_sizer<rclc::item_size_eviction_tag>
 // Create cache with maximum cumulated item sizes = 10
 rclc::cache<int, std::string, std::hash<int>, std::equal_to<int>, StringSizer> cache(10);
 ```
+
+### Supported compilers
+
+RCLC has been tested on the following platforms:
+
+| Operating System | Compiler          | Status |
+|:----------------:|:-----------------:|:------:|
+| Linux 4.4        | G++ 5.4.0         | OK     |
+| Windows 7        | MSVC 2013 patch 5 | OK     |
 
 ## TODO
 

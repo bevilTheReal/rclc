@@ -23,5 +23,40 @@ ExternalProject_Get_Property(googletest source_dir)
 set(GTEST_INCLUDE_DIRS ${source_dir}/googletest/include PARENT_SCOPE)
 
 ExternalProject_Get_Property(googletest binary_dir)
-set(GTEST_LIBS_DIR ${binary_dir}/googletest PARENT_SCOPE)
+
+add_library(gtest STATIC IMPORTED GLOBAL)
+add_library(gtest_main STATIC IMPORTED GLOBAL)
+
+if(UNIX)
+
+   set(GTEST_LIBRARY ${binary_dir}/googletest/libgtest.a)
+   set(GTEST_MAIN_LIBRARY ${binary_dir}/googletest/libgtest_main.a)
+
+   set_target_properties(gtest PROPERTIES IMPORTED_LOCATION ${GTEST_LIBRARY})
+   set_target_properties(gtest_main PROPERTIES IMPORTED_LOCATION ${GTEST_MAIN_LIBRARY})
+
+elseif(WIN32)
+
+   set(GTEST_LIBRARY_DEBUG ${binary_dir}/googletest/DebugLibs/gtest.lib)
+   set(GTEST_LIBRARY_RELEASE ${binary_dir}/googletest/ReleaseLibs/gtest.lib)
+   set(GTEST_MAIN_LIBRARY_DEBUG ${binary_dir}/googletest/DebugLibs/gtest_main.lib)
+   set(GTEST_MAIN_LIBRARY_RELEASE ${binary_dir}/googletest/ReleaseLibs/gtest_main.lib)
+
+   set_target_properties(gtest PROPERTIES
+      IMPORTED_LOCATION_DEBUG ${GTEST_LIBRARY_DEBUG}
+      IMPORTED_LOCATION_RELEASE ${GTEST_LIBRARY_RELEASE}
+      IMPORTED_LOCATION_RELWITHDEBINFO ${GTEST_LIBRARY_RELEASE}
+      IMPORTED_LOCATION_MINSIZEREL ${GTEST_LIBRARY_RELEASE}
+      )
+
+   set_target_properties(gtest_main PROPERTIES
+      IMPORTED_LOCATION_DEBUG ${GTEST_MAIN_LIBRARY_DEBUG}
+      IMPORTED_LOCATION_RELEASE ${GTEST_MAIN_LIBRARY_RELEASE}
+      IMPORTED_LOCATION_RELWITHDEBINFO ${GTEST_MAIN_LIBRARY_RELEASE}
+      IMPORTED_LOCATION_MINSIZEREL ${GTEST_MAIN_LIBRARY_RELEASE}
+      )
+
+else()
+   message(FATAL_ERROR "Unsupported platform")
+endif()
 

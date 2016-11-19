@@ -5,6 +5,12 @@
 #include <list>
 #include <utility>
 
+#ifndef _MSC_VER
+#define NOEXCEPT noexcept
+#else
+#define NOEXCEPT
+#endif
+
 namespace rclc {
 
 // Tags to define the type of eviction {{{
@@ -273,7 +279,7 @@ public:
       return 1;
    }
 
-   void clear() noexcept
+   void clear() NOEXCEPT
    {
       this->m_cache.clear();
       this->m_evictionList.clear();
@@ -295,7 +301,7 @@ public:
    {
       return this->m_cache.key_eq();
    }
-   typename super_t::allocator_type get_allocator() const noexcept
+   typename super_t::allocator_type get_allocator() const NOEXCEPT
    {
       return this->m_cache.get_allocator();
    }
