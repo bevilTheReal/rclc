@@ -19,6 +19,11 @@ TEST(BasicUse, canInsertAndAccess)
    // Change a value
    cache[1] = "un";
    ASSERT_EQ("un", cache[1]);
+
+   // Passing key by const-reference
+   int key = 5;
+   cache[key] = "five";
+   ASSERT_EQ("five", cache[key]);
 }
 
 TEST(BasicUse, eviction)
@@ -103,5 +108,12 @@ TEST(BasicUse, sizeEviction)
    std::string copy = cache[1];
    const std::string& ref = cache[1];
    ASSERT_EQ(copy, ref);
+
+   // Passing key by const-reference
+   int key = 5;
+   cache[key] = "five"; // mem used = 12 -> eviction of oldest, which is 2
+   ASSERT_EQ("five", (std::string)cache[key]);
+   ASSERT_EQ(7U, cache.memory());
+   ASSERT_EQ(4U, cache.size());
 }
 
